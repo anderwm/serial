@@ -1,22 +1,28 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(serial)
 
-# Find catkin
-find_package(catkin REQUIRED)
-
 if(UNIX AND NOT APPLE)
     # If Linux, add rt and pthread
+    set(PROJ_LIBS rt pthread)
+else()
+    set(PROJ_LIBS "")
+endif()
+
+option(BUILD_WITH_CATKIN "Build using catkin." ON)
+
+# Find catkin
+if (BUILD_WITH_CATKIN)
+    find_package(catkin REQUIRED)
     catkin_package(
         LIBRARIES ${PROJECT_NAME}
         INCLUDE_DIRS include
-        DEPENDS rt pthread
+        DEPENDS ${PROJ_LIBS}
     )
 else()
-    # Otherwise normal call
-    catkin_package(
-        LIBRARIES ${PROJECT_NAME}
-        INCLUDE_DIRS include
-    )
+    SET(CATKIN_PACKAGE_LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib")
+    SET(CATKIN_PACKAGE_BIN_DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
+    SET(CATKIN_GLOBAL_INCLUDE_DESTINATION "${CMAKE_INSTALL_PREFIX}/include")
+    SET(CATKIN_ENABLE_TESTING OFF)
 endif()
 
 ## Sources

@@ -2,6 +2,10 @@ all: serial
 
 CMAKE_FLAGS := -DCMAKE_INSTALL_PREFIX=/tmp/usr/local
 
+no_catkin: serial
+
+CMAKE_FLAGS := -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_WITH_CATKIN=OFF
+
 install:
 	cd build && make install
 
